@@ -1,0 +1,55 @@
+<form *ngIf="form" [formGroup]="form" class="container">
+
+  <div fxLayout="row" fxLayoutGap="10px">
+    <mat-form-field>
+      <mat-label>First Name</mat-label>
+      <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="1" formControlName="firstName"></textarea>
+      <mat-error *ngIf="form.controls.firstName.hasError('required')">First name is required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Last Name</mat-label>
+      <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="1" formControlName="lastName"></textarea>
+      <mat-error *ngIf="form.controls.lastName.hasError('required')">Last name is required</mat-error>
+    </mat-form-field>
+
+
+    <mat-form-field>
+      <mat-label>Birth Date</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="birthDate" [max]="maxDate">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+      <mat-error *ngIf="form.controls.birthDate.hasError('required')">Birth date is required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>VAT Code</mat-label>
+      <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="1" formControlName="vatCode"></textarea>
+      <mat-error *ngIf="form.controls.vatCode.hasError('required')">VAT code is required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Email</mat-label>
+      <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="1" formControlName="email"></textarea>
+      <mat-error *ngIf="form.controls.email.hasError('required')">Email is required</mat-error>
+      <mat-error *ngIf="form.controls.email.hasError('email')">Must be a valid email</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Select Doctor</mat-label>
+      <mat-select formControlName="doctor">
+        <ng-container *ngFor="let doctor of doctors">
+          <mat-option value="doctor">{{ doctor.firstName }} {{ doctor.lastName }}</mat-option>
+        </ng-container>
+      </mat-select>
+      <mat-error *ngIf="form.controls.doctor.hasError('required')">Selecting doctor is required</mat-error>
+    </mat-form-field>
+  </div>
+
+  <app-address></app-address>
+  <app-addresses></app-addresses>
+
+  <div fxLayoutAlign="center">
+    <button mat-flat-button type="submit" (click)="savePatient()" [disabled]="!form.valid" color="primary">Save</button>
+  </div>
+</form>

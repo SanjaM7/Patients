@@ -2,24 +2,23 @@
   <button mat-icon-button (click)="sidenav.toggle()">
     <mat-icon>menu</mat-icon>
   </button>
-  <span routerLink="/">Nesto</span>
 </mat-toolbar>
 
 <mat-sidenav-container class="sidenav">
   <mat-sidenav #sidenav mode="side" opened="false" class="sidenav-container">
     <mat-list role="list">
-      <mat-list-item role="listitem">
-        <button mat-button routerLink="/" routerLinkActive="active">
-          Home
-        </button>
+      <mat-list-item role="listitem" [routerLink]="['/home']" routerLinkActive="active">
+        Home
       </mat-list-item>
-      <mat-list-item role="listitem">Add new patient</mat-list-item>
-      <mat-list-item role="listitem">List patients</mat-list-item>
+      <mat-list-item role="listitem" [routerLink]="['/patients/add']" routerLinkActive="active">
+        Add new patient
+      </mat-list-item>
+      <mat-list-item role="listitem" [routerLink]="['/patients/list']" routerLinkActive="active">
+        List patients
+      </mat-list-item>
     </mat-list>
   </mat-sidenav>
   <mat-sidenav-content>
-    <div style="padding: 20px 30px">
-      <router-outlet></router-outlet>
-    </div>
+    <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>

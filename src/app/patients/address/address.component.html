@@ -1,0 +1,31 @@
+<div *ngIf="form" [formGroup]="form">
+  <mat-form-field>
+    <mat-label>Phone Number</mat-label>
+    <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="2" formControlName="phoneNumber"></textarea>
+    <mat-error *ngIf="form.controls.phoneNumber.hasError('required')">Phone number is required</mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Street</mat-label>
+    <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="2" formControlName="street"></textarea>
+    <mat-error *ngIf="form.controls.street.hasError('required')">Street is required</mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>City</mat-label>
+    <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="2" formControlName="city"></textarea>
+    <mat-error *ngIf="form.controls.city.hasError('required')">City is required</mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Zip Code</mat-label>
+    <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="2" formControlName="zipCode"></textarea>
+    <mat-error *ngIf="form.controls.city.hasError('required')">Zip code is required</mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Country</mat-label>
+    <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="2" formControlName="country"></textarea>
+    <mat-error *ngIf="form.controls.country.hasError('required')">Country is required</mat-error>
+  </mat-form-field>
+</div>

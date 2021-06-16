@@ -1,0 +1,72 @@
+<table mat-table [dataSource]="patientsDataSource" class="container table">
+  <ng-container matColumnDef="lastName">
+    <th mat-header-cell *matHeaderCellDef> Last Name </th>
+    <td mat-cell *matCellDef="let patient"> {{ patient.lastName }} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="firstName">
+    <th mat-header-cell *matHeaderCellDef> First Name </th>
+    <td mat-cell *matCellDef="let patient"> {{ patient.firstName }} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="registeredDate">
+    <th mat-header-cell *matHeaderCellDef> Registration date </th>
+    <td mat-cell *matCellDef="let patient"> {{ patient.registeredDate | date: 'medium' }} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="doctor">
+    <th mat-header-cell *matHeaderCellDef> Doctor </th>
+    <td mat-cell *matCellDef="let patient"> {{ patient.doctor }} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="phone">
+    <th mat-header-cell *matHeaderCellDef> Phone </th>
+    <td mat-cell *matCellDef="let patient"> {{ patient.addresses[0].phone }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="email">
+    <th mat-header-cell *matHeaderCellDef> Email </th>
+
+
+    <td mat-cell *matCellDef="let patient">
+      <a href="mailto:{{patient.addresses[0].email}}">{{ patient.addresses[0].email }}</a>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="street">
+    <th mat-header-cell *matHeaderCellDef> Street </th>
+    <td mat-cell *matCellDef="let patient"> {{ patient.addresses[0].street }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="city">
+    <th mat-header-cell *matHeaderCellDef> City </th>
+    <td mat-cell *matCellDef="let patient"> {{ patient.addresses[0].city }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="zipcode">
+    <th mat-header-cell *matHeaderCellDef> Zip code </th>
+    <td mat-cell *matCellDef="let patient"> {{ patient.addresses[0].zipcode }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="country">
+    <th mat-header-cell *matHeaderCellDef> Country </th>
+    <td mat-cell *matCellDef="let patient"> {{ patient.addresses[0].country }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef> Actions </th>
+    <td mat-cell *matCellDef="let patient">
+
+      <button mat-button type="button" color="primary" matTooltip="Open Patient Modal" matTooltipClass="sb-tooltip"
+        (click)="openPatientModal(patient)">
+        <mat-icon> list_alt</mat-icon>
+      </button>
+
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+
+<mat-paginator [pageSize]="5" [pageSizeOptions]="[5,10,20]" showFirstLastButtons class="paginator"></mat-paginator>

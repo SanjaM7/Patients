@@ -7,11 +7,15 @@ const routes: Routes = [
     path: 'home',
     component: HomeComponent
   },
+  { path: 'patients', 
+    loadChildren: () => import('./patients/patients.module').then(m => m.PatientsModule) 
+  },
   {
     path: '',
     redirectTo: 'home',
     pathMatch: 'full'
   },
+
 ];
 
 @NgModule({
