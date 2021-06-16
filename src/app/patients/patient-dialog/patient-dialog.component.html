@@ -3,5 +3,5 @@
   <p>Id: {{ patientListItemWithDoctor.id }}</p>
   <p>Registered Date: {{ patientListItemWithDoctor.registeredDate | date: 'medium' }}</p>
 
-  <app-patient-add></app-patient-add>
+  <app-patient-add [patient]="patientListItemWithDoctor" [disabled]="true"></app-patient-add>
 </div>

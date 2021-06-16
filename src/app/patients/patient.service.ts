@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { combineLatest, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { DoctorService } from './doctor.service';
+import { DoctorService } from '../doctors/doctor.service';
 import { Patients } from './mocks/patients-mock-data';
 import { PatientListItemWithDoctor } from './models/patient-list-item-with-doctor';
 

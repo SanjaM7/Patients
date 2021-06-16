@@ -1,5 +1,4 @@
 import { Address } from "./address";
-
 export interface PatientListItem {
     id: number;
     registeredDate: string;

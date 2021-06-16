@@ -1,22 +1,28 @@
-<button mat-flat-button (click)="addAddress()" color="primary">Add Address</button>
+<div class="p-3">
+  <button mat-flat-button (click)="addAddress()" color="primary">
+    Add Address
+  </button>
+</div>
 <div *ngIf="form" [formGroup]="form">
 
   <div formArrayName="addresses" *ngFor="let address of addresses.controls ; let i=index">
     <div [formGroupName]="i">
-      <mat-form-field appearance="fill">
-        <mat-label>Address</mat-label>
-        <mat-select formControlName="type">
-          <mat-option value="SECONDHOME">Second Home</mat-option>
-          <mat-option value="WORK">Work</mat-option>
-          <mat-option value="HOLIDAYPLACE">Holiday place</mat-option>
-          <mat-option value="CLOSERELATIVE">Close relative</mat-option>
-        </mat-select>
-      </mat-form-field>
+      <div fxLayout="row" fxLayoutGap="10px">
+        <mat-form-field>
+          <mat-label>Address</mat-label>
+          <mat-select formControlName="type">
+            <mat-option value="SECONDHOME">Second Home</mat-option>
+            <mat-option value="WORK">Work</mat-option>
+            <mat-option value="HOLIDAYPLACE">Holiday place</mat-option>
+            <mat-option value="CLOSERELATIVE">Close relative</mat-option>
+          </mat-select>
+        </mat-form-field>
 
-      <mat-form-field *ngIf="addressesControls[i].controls.name">
-        <mat-label>Name</mat-label>
-        <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="2" formControlName="name"></textarea>
-      </mat-form-field>
+        <mat-form-field *ngIf="addressesControls[i].controls.name">
+          <mat-label>Name</mat-label>
+          <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="1" formControlName="name"></textarea>
+        </mat-form-field>
+      </div>
 
       <app-address></app-address>
     </div>

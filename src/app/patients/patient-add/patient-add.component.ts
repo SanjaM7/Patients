@@ -1,9 +1,12 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RxwebValidators } from '@rxweb/reactive-form-validators';
+import { Observable, of, Subscription } from 'rxjs';
+import { DoctorService } from 'src/app/doctors/doctor.service';
+import { Doctors } from 'src/app/doctors/models/doctors';
 import { AddressComponent } from '../address/address.component';
 import { AddressesComponent } from '../addresses/addresses.component';
-import { Doctors } from '../mocks/doctors.mock.data';
+import { PatientListItemWithDoctor } from '../models/patient-list-item-with-doctor';
 
 @Component({
   selector: 'app-patient-add',
@@ -11,18 +14,29 @@ import { Doctors } from '../mocks/doctors.mock.data';
   styleUrls: ['./patient-add.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PatientAddComponent implements OnInit, AfterViewInit {
+export class PatientAddComponent implements OnInit, AfterViewInit, OnDestroy {
 
   form!: FormGroup;
   maxDate = new Date();
-  doctors = Doctors;
+  doctors$: Observable<Doctors[]> = of();
+  subscription!: Subscription;
+  @Input() patient?: PatientListItemWithDoctor;
+  @Input() disabled: boolean = false;
   @ViewChild(AddressComponent) addressComponent!: AddressComponent;
   @ViewChild(AddressesComponent) addressesComponent!: AddressesComponent;
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(
+    private formBuilder: FormBuilder,
+    private doctorsService: DoctorService) { }
 
   ngOnInit(): void {
     this.initPatientAddForm();
+    this.getDoctors();
+    console.log(this.patient);
+  }
+
+  private getDoctors() {
+    this.doctors$ = this.doctorsService.doctors$;
   }
 
   private initPatientAddForm(): void {
@@ -39,7 +53,7 @@ export class PatientAddComponent implements OnInit, AfterViewInit {
   }
 
   private addVatCodeValidator(): void {
-    this.form.controls.birthDate.valueChanges.subscribe((birthDate: Date) => {
+    this.subscription = this.form.controls.birthDate.valueChanges.subscribe((birthDate: Date) => {
       if(!birthDate) {
         return;
       }
@@ -62,6 +76,7 @@ export class PatientAddComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.addAddressForm();
     this.addAddressesForm();
+    this.disableForm();
   }
   
   private addAddressForm() {
@@ -74,7 +89,25 @@ export class PatientAddComponent implements OnInit, AfterViewInit {
     this.form.addControl('addresses', this.addressesComponent.form);
   }
 
+  disableForm() {
+    if(this.disabled === true) {
+      this.form.disable();
+    }
+  }
+
   savePatient(): void {
+    // const firstName = this.form.controls.firstName.value;
+    // const lastName = this.form.controls.lastName.value;
+    // const doctor = this.form.controls.doctor.value;
+    // let addresses = [];
+
+    // const patient = new Patient(firstName, lastName, doctor)
     console.log(this.form.value);
+  }
+
+  ngOnDestroy(): void {
+    if(this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 }

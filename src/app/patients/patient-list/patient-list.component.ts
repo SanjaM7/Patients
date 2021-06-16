@@ -34,7 +34,7 @@ export class PatientListComponent implements OnInit {
 
   openPatientModal(patient: PatientListItemWithDoctor): void {
     const dialogRef = this.dialog.open(PatientDialogComponent, {
-      width: '750px',
+      width: '1250px',
       data: patient
     });
 

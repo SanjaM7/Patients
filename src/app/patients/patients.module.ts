@@ -20,6 +20,7 @@ import { PatientAddComponent } from './patient-add/patient-add.component';
 import { PatientDialogComponent } from './patient-dialog/patient-dialog.component';
 import { PatientListComponent } from './patient-list/patient-list.component';
 import { PatientsRoutingModule } from './patients-routing.module';
+import { DoctorsModule } from '../doctors/doctors.module';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { PatientsRoutingModule } from './patients-routing.module';
     MatTooltipModule,
     MatIconModule,
     MatDialogModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    DoctorsModule
   ],
 })
 export class PatientsModule { }

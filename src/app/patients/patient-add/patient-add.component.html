@@ -38,8 +38,8 @@
     <mat-form-field>
       <mat-label>Select Doctor</mat-label>
       <mat-select formControlName="doctor">
-        <ng-container *ngFor="let doctor of doctors">
-          <mat-option value="doctor">{{ doctor.firstName }} {{ doctor.lastName }}</mat-option>
+        <ng-container *ngFor="let doctor of doctors$ | async">
+          <mat-option [value]="doctor.id">{{ doctor.firstName }} {{ doctor.lastName }}</mat-option>
         </ng-container>
       </mat-select>
       <mat-error *ngIf="form.controls.doctor.hasError('required')">Selecting doctor is required</mat-error>

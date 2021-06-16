@@ -6,7 +6,6 @@ import { AddressComponent } from '../address/address.component';
 @Component({
   selector: 'app-addresses',
   templateUrl: './addresses.component.html',
-  styleUrls: ['./addresses.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddressesComponent implements OnInit {
@@ -51,8 +50,8 @@ export class AddressesComponent implements OnInit {
     }
 
     private addAddressesForm(): void {
-      this._addressesComponents.forEach(addressInstance => {
-        this.addAddressForm(addressInstance);
+      this._addressesComponents.forEach(addressComponent => {
+        this.addAddressForm(addressComponent);
       });
     }
 
