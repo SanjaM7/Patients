@@ -1,8 +1,10 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { combineLatest, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { DoctorService } from '../doctors/doctor.service';
 import { Patients } from './mocks/patients-mock-data';
+import { Patient } from './models/patient';
 import { PatientListItemWithDoctor } from './models/patient-list-item-with-doctor';
 
 @Injectable({
@@ -10,7 +12,10 @@ import { PatientListItemWithDoctor } from './models/patient-list-item-with-docto
 })
 export class PatientService {
 
-  constructor(private doctorService: DoctorService) { }
+  constructor(
+    private doctorService: DoctorService,
+    private httpClient: HttpClient
+    ) { }
 
   patients$ = of(Patients);
 
@@ -37,5 +42,15 @@ export class PatientService {
       return patientsWithDoctor;
     })
   )
+
+  savePatient(patient: Patient): Observable<Patient> {
+    const url = 'some url';
+    const body = {
+      patient
+    };
+
+    return of(patient);
+    // return this.httpClient.post<Patient>(url, body);
+  }
 }
 

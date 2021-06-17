@@ -4,7 +4,6 @@ import { PatientListItemWithDoctor } from '../models/patient-list-item-with-doct
 
 @Component({
   templateUrl: './patient-dialog.component.html',
-  styleUrls: ['./patient-dialog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PatientDialogComponent implements OnInit {

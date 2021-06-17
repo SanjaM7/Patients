@@ -1,4 +1,5 @@
 import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -14,13 +15,13 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RxReactiveFormsModule } from '@rxweb/reactive-form-validators';
+import { DoctorsModule } from '../doctors/doctors.module';
 import { AddressComponent } from './address/address.component';
 import { AddressesComponent } from './addresses/addresses.component';
 import { PatientAddComponent } from './patient-add/patient-add.component';
 import { PatientDialogComponent } from './patient-dialog/patient-dialog.component';
 import { PatientListComponent } from './patient-list/patient-list.component';
 import { PatientsRoutingModule } from './patients-routing.module';
-import { DoctorsModule } from '../doctors/doctors.module';
 
 @NgModule({
   declarations: [
@@ -48,7 +49,10 @@ import { DoctorsModule } from '../doctors/doctors.module';
     MatIconModule,
     MatDialogModule,
     FlexLayoutModule,
-    DoctorsModule
+    DoctorsModule,
   ],
+  providers: [
+    HttpClient
+  ]
 })
 export class PatientsModule { }

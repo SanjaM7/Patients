@@ -1,22 +1,17 @@
-import { ChangeDetectionStrategy, Component, OnInit, QueryList, ViewChildren } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { AfterViewInit, Component, ComponentFactoryResolver, ViewChild, ViewContainerRef } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { AddressComponent } from '../address/address.component';
 
 @Component({
   selector: 'app-addresses',
   templateUrl: './addresses.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  // TODO: Fix for push change detection
+  // changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AddressesComponent implements OnInit {
+export class AddressesComponent implements AfterViewInit {
 
   form!: FormGroup;
-  subscription!: Subscription;
-  private _addressesComponents!: QueryList<AddressComponent>;
-  @ViewChildren(AddressComponent)set addressesComponents(value: QueryList<AddressComponent>) {
-    this._addressesComponents = value;
-    this.addAddressesForm();
-  }
+  @ViewChild('container', { read: ViewContainerRef }) container!: ViewContainerRef;
 
   get addresses(): FormArray {
     return this.form.controls.addresses as FormArray;
@@ -26,64 +21,37 @@ export class AddressesComponent implements OnInit {
     return this.addresses.controls as FormGroup[];
   }
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(
+    private formBuilder: FormBuilder,
+    private componentFactoryResolver: ComponentFactoryResolver) { }
   
-    ngOnInit(): void {
-      this.initAddressesForm();
-    }
+  ngAfterViewInit(): void {
+    this.initAddressesForm();
+  }
     
-    private initAddressesForm(): void {
-      this.form = this.formBuilder.group({
-        addresses: this.formBuilder.array([])
-      });
-    }
-  
-    createAddress(): FormGroup {
-      return this.formBuilder.group({
-        type: ['', [Validators.required]],
-      })
-    }
-  
-    addAddress(): void {
-      this.addresses.push(this.createAddress());
-      this.addNameControl();
-    }
+  private initAddressesForm(): void {
+    this.form = this.formBuilder.group({
+      addresses: this.formBuilder.array([])
+    });
 
-    private addAddressesForm(): void {
-      this._addressesComponents.forEach(addressComponent => {
-        this.addAddressForm(addressComponent);
-      });
-    }
-
-    addAddressForm(addressInstance: AddressComponent): void {
-      addressInstance.form.setParent(this.form);
-
-      this.addressesControls.forEach(formGroup => {
-        formGroup.addControl('homeAddress', addressInstance.form)
-      })
-    }
+    this.addAddress(true);
+  }
     
-  private addNameControl(): void {
-    this.unsubscribe();
-    this.addressesControls.forEach(formGroup => {
-      this.subscription = formGroup.controls.type.valueChanges
-        .subscribe(type => {
-          if (type === 'WORK' || type === 'CLOSERELATIVE') {
-            formGroup.addControl('name', this.formBuilder.control(''));
-          } else {
-            formGroup.removeControl('name');
-          }
-        })
-    })
+  addAddress(homeAddress: boolean = false): void {
+    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(AddressComponent);
+    const componentRef = this.container.createComponent(componentFactory);
+    // TODO: Remove this timeout
+    setTimeout(() => {
+      componentRef.instance.form.setParent(this.form);
+      this.addresses.push(componentRef.instance.form);
+      componentRef.instance.homeAddress = homeAddress;
+    }, 150)
   }
 
-  private unsubscribe(): void {
-    if(this.subscription) {
-      this.subscription.unsubscribe();
-    }
-  }
-
-  ngOnDestroy(): void {
-    this.unsubscribe();
+  disable() {
+    this.form.disable();
+    // this.addressesControls.forEach(formGroup => {
+    //   formGroup.disable();
+    // });
   }
 }

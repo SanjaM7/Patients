@@ -37,10 +37,5 @@ export class PatientListComponent implements OnInit {
       width: '1250px',
       data: patient
     });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      console.log(result);
-    });
   }
 }

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
@@ -11,7 +11,20 @@ export class AddressComponent implements OnInit, OnDestroy {
 
   form!: FormGroup;
   subscription!: Subscription;
-  constructor(private formBuilder: FormBuilder) { }
+  _homeAddress: boolean = true;
+  set homeAddress(value: boolean) {
+     this._homeAddress = value;
+     this.setHomeAddressControls();
+     this.changeDetectionRef.detectChanges();
+  }
+  constructor(
+    private formBuilder: FormBuilder,
+    private changeDetectionRef: ChangeDetectorRef
+    ) { }
+
+  get type(): AbstractControl {
+    return this.form.controls.type;
+  }
 
   get phoneNumber(): AbstractControl {
     return this.form.controls.phoneNumber;
@@ -37,16 +50,39 @@ export class AddressComponent implements OnInit, OnDestroy {
     this.initAddressForm();
   }
 
+  private setHomeAddressControls(): void {
+    if(this._homeAddress) {
+      this.type.setValue('HOME');
+      this.type.updateValueAndValidity();
+    }
+  }
+
   private initAddressForm() {
     this.form = this.formBuilder.group({
-        phoneNumber: ['', [ Validators.required]],
+        type: ['', [Validators.required]],
+        phoneNumber: ['', [
+          Validators.required, 
+          // Validators.pattern('^\+?[0-9\s]\+$')
+        ]],
         street: ['', Validators.required],
         city: ['', Validators.required],
         zipCode: ['', Validators.required],
         country: ['', Validators.required]
     })
 
+    this.addNameControl();
     this.phoneNumberRemoveSpaces();
+  }
+
+  private addNameControl(): void {
+    this.subscription = this.type.valueChanges
+      .subscribe(type => {
+        if (type === 'WORK' || type === 'RELATIVE') {
+          this.form.addControl('name', this.formBuilder.control(''));
+        } else {
+          this.form.removeControl('name')
+        }
+      })
   }
 
   onPrefixToPhoneNumberOnBlur(): void {
@@ -63,6 +99,10 @@ export class AddressComponent implements OnInit, OnDestroy {
       let phoneNumberSpacesRemoved = phoneNumber.replace(/\s/g, "");
       this.phoneNumber.setValue(phoneNumberSpacesRemoved, { emitEvent: false });
     })
+  }
+
+  disableForm(): void {
+    this.form.disable();
   }
 
   ngOnDestroy(): void {
