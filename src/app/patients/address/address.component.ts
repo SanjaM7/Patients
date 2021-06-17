@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
@@ -10,13 +10,20 @@ import { Subscription } from 'rxjs';
 export class AddressComponent implements OnInit, OnDestroy {
 
   form!: FormGroup;
-  subscription!: Subscription;
+  typeSubscription!: Subscription;
+  phoneSubscription!: Subscription;
   _homeAddress: boolean = true;
-  set homeAddress(value: boolean) {
+  @Input() set homeAddress(value: boolean) {
      this._homeAddress = value;
      this.setHomeAddressControls();
      this.changeDetectionRef.detectChanges();
   }
+  @Input() set disabled(value: boolean) {
+    if(value){
+      this.form?.disable();
+    }
+  }
+
   constructor(
     private formBuilder: FormBuilder,
     private changeDetectionRef: ChangeDetectorRef
@@ -26,8 +33,8 @@ export class AddressComponent implements OnInit, OnDestroy {
     return this.form.controls.type;
   }
 
-  get phoneNumber(): AbstractControl {
-    return this.form.controls.phoneNumber;
+  get phone(): AbstractControl {
+    return this.form.controls.phone;
   }
 
   get street(): AbstractControl {
@@ -38,8 +45,8 @@ export class AddressComponent implements OnInit, OnDestroy {
     return this.form.controls.city;
   }
 
-  get zipCode(): AbstractControl {
-    return this.form.controls.zipCode;
+  get zipcode(): AbstractControl {
+    return this.form.controls.zipcode;
   }
 
   get country(): AbstractControl {
@@ -60,13 +67,13 @@ export class AddressComponent implements OnInit, OnDestroy {
   private initAddressForm() {
     this.form = this.formBuilder.group({
         type: ['', [Validators.required]],
-        phoneNumber: ['', [
+        phone: ['', [
           Validators.required, 
-          // Validators.pattern('^\+?[0-9\s]\+$')
+          Validators.pattern(/^\+?[0-9\s]+$/)
         ]],
         street: ['', Validators.required],
         city: ['', Validators.required],
-        zipCode: ['', Validators.required],
+        zipcode: ['', Validators.required],
         country: ['', Validators.required]
     })
 
@@ -75,7 +82,7 @@ export class AddressComponent implements OnInit, OnDestroy {
   }
 
   private addNameControl(): void {
-    this.subscription = this.type.valueChanges
+    this.typeSubscription = this.type.valueChanges
       .subscribe(type => {
         if (type === 'WORK' || type === 'RELATIVE') {
           this.form.addControl('name', this.formBuilder.control(''));
@@ -86,28 +93,26 @@ export class AddressComponent implements OnInit, OnDestroy {
   }
 
   onPrefixToPhoneNumberOnBlur(): void {
-    if(this.phoneNumber.value.charAt(0) != '+') {
-      const phoneNumberWithPrefix = `+39${this.form.controls.phoneNumber.value}`; 
-      this.phoneNumber.setValue(phoneNumberWithPrefix);
+    if(this.phone.value.charAt(0) != '+') {
+      const phoneNumberWithPrefix = `+39${this.form.controls.phone.value}`; 
+      this.phone.setValue(phoneNumberWithPrefix);
     }
   }
 
   // TODO: find a way to see spaces on input but remove them in control
-  // TODO: regex pattern
   private phoneNumberRemoveSpaces(): void {
-    this.subscription = this.phoneNumber.valueChanges.subscribe(phoneNumber => {
+    this.phoneSubscription = this.phone.valueChanges.subscribe(phoneNumber => {
       let phoneNumberSpacesRemoved = phoneNumber.replace(/\s/g, "");
-      this.phoneNumber.setValue(phoneNumberSpacesRemoved, { emitEvent: false });
+      this.phone.setValue(phoneNumberSpacesRemoved, { emitEvent: false });
     })
   }
 
-  disableForm(): void {
-    this.form.disable();
-  }
-
   ngOnDestroy(): void {
-    if(this.subscription) {
-      this.subscription.unsubscribe();
+    if(this.typeSubscription) {
+      this.typeSubscription.unsubscribe();
+    }
+    if(this.phoneSubscription) {
+      this.phoneSubscription.unsubscribe();
     }
   }
 }

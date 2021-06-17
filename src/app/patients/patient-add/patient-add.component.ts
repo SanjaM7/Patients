@@ -57,6 +57,8 @@ export class PatientAddComponent implements OnInit, AfterViewInit, OnDestroy {
     })
 
     this.addVatCodeValidator();
+    this.disableForm();
+    this.form.valueChanges.subscribe(console.log);
   }
 
   private addVatCodeValidator(): void {
@@ -82,7 +84,6 @@ export class PatientAddComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.addAddressesForm();
-    this.disableForm();
     this.populatePatientForm(this._patient);
   }
   
@@ -92,15 +93,16 @@ export class PatientAddComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private populatePatientForm(patient: PatientListItemWithDoctor) {
-    this.form.controls.firstName.setValue(patient.firstName);
-    this.form.controls.lastName.setValue(patient.lastName);
-    this.form.controls.lastName.setValue(patient.lastName);
+    if(!this._patient) {
+      return;
+    }
+    this.form.controls.firstName?.setValue(patient.firstName);
+    this.form.controls.lastName?.setValue(patient.lastName);
   }
 
   disableForm(): void {
     if(this.disabled === true) {
       this.form.disable();
-      this.addressesComponent.form.disable();
     }
   }
 
@@ -112,7 +114,10 @@ export class PatientAddComponent implements OnInit, AfterViewInit, OnDestroy {
 
     const patient = new Patient(firstName, lastName, doctor, addresses);
     this.patientService.savePatient(patient)
-      .subscribe(patient => this.router.navigateByUrl('/'));
+      .subscribe(patient => {
+        console.log(patient);
+        this.router.navigateByUrl('/')
+      });
   }
 
   ngOnDestroy(): void {

@@ -1,6 +1,6 @@
 export interface Address {
     type: string;
-    email: string;
+    name?: string;
     phone: string;
     street: string;
     city: string;

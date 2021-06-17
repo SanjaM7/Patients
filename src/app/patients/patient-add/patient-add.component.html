@@ -46,7 +46,7 @@
     </mat-form-field>
   </div>
 
-  <app-addresses></app-addresses>
+  <app-addresses [disabled]="disabled"></app-addresses>
 
   <div fxLayoutAlign="center">
     <button mat-flat-button type="submit" (click)="savePatient()" [disabled]="!form.valid" color="primary">Save</button>

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ComponentFactoryResolver, ViewChild, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, Component, ComponentFactoryResolver, ComponentRef, Input, ViewChild, ViewContainerRef } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { AddressComponent } from '../address/address.component';
 
@@ -11,6 +11,7 @@ import { AddressComponent } from '../address/address.component';
 export class AddressesComponent implements AfterViewInit {
 
   form!: FormGroup;
+  @Input() disabled: boolean = false;
   @ViewChild('container', { read: ViewContainerRef }) container!: ViewContainerRef;
 
   get addresses(): FormArray {
@@ -45,13 +46,13 @@ export class AddressesComponent implements AfterViewInit {
       componentRef.instance.form.setParent(this.form);
       this.addresses.push(componentRef.instance.form);
       componentRef.instance.homeAddress = homeAddress;
+      this.disableAddressComponent(componentRef);
     }, 150)
   }
 
-  disable() {
-    this.form.disable();
-    // this.addressesControls.forEach(formGroup => {
-    //   formGroup.disable();
-    // });
+  disableAddressComponent(componentRef: ComponentRef<AddressComponent>) {
+    if(this.disabled) {
+      componentRef.instance.disabled = true;
+    }
   }
 }

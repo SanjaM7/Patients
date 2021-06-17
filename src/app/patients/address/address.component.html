@@ -21,9 +21,10 @@
   <div fxLayout="row" fxLayoutGap="10px">
     <mat-form-field>
       <mat-label>Phone Number</mat-label>
-      <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="1" formControlName="phoneNumber"
+      <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="1" formControlName="phone"
         (blur)="onPrefixToPhoneNumberOnBlur()"></textarea>
-      <mat-error *ngIf="phoneNumber.hasError('required')">Phone number is required</mat-error>
+      <mat-error *ngIf="phone.hasError('required')">Phone number is required</mat-error>
+      <mat-error *ngIf="phone.hasError('pattern')">Must be a valid phone number</mat-error>
     </mat-form-field>
 
     <mat-form-field>
@@ -40,8 +41,8 @@
 
     <mat-form-field>
       <mat-label>Zip Code</mat-label>
-      <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="1" formControlName="zipCode"></textarea>
-      <mat-error *ngIf="zipCode.hasError('required')">Zip code is required</mat-error>
+      <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="1" formControlName="zipcode"></textarea>
+      <mat-error *ngIf="zipcode.hasError('required')">Zip code is required</mat-error>
     </mat-form-field>
 
     <mat-form-field>
